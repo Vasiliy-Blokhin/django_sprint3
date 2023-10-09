@@ -16,7 +16,7 @@ class Post(core.BaseModel):
     pub_date = models.DateTimeField(
         verbose_name='Дата и время публикации',
         help_text=('Если установить дату и время в ' +
-        'будущем — можно делать отложенные публикации.')
+                   'будущем — можно делать отложенные публикации.')
     )
     author = models.ForeignKey(
         User,
@@ -58,7 +58,7 @@ class Category(core.BaseModel):
         unique=True,
         verbose_name='Идентификатор',
         help_text=('Идентификатор страницы для URL; ' +
-        'разрешены символы латиницы, цифры, дефис и подчёркивание.')
+                   'разрешены символы латиницы, цифры, дефис и подчёркивание.')
     )
 
     class Meta:
