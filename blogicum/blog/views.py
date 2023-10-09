@@ -8,13 +8,13 @@ posts = Post.objects.all().select_related(
     'author',
     'location',
     'category'
-    ).filter(
-        pub_date__lte=timezone.now(),
-        is_published=True,
-        category__is_published=True
-    ).order_by(
-        '-pub_date'
-    )
+).filter(
+    pub_date__lte=timezone.now(),
+    is_published=True,
+    category__is_published=True
+).order_by(
+    '-pub_date'
+)
 
 
 def index(request):
@@ -30,7 +30,17 @@ def post_detail(request, post_id):
 
 
 def category_posts(request, category_slug):
-    category = get_object_or_404(Category, slug__contains=category_slug)
+    category = get_object_or_404(
+        Category,
+        slug__contains=category_slug
+    )
     post_list = get_list_or_404(posts, category_id__exact=category.pk)
-    context = {'post_list': post_list, 'category': category}
-    return render(request, 'blog/category.html', context)
+    context = {
+        'post_list': post_list,
+        'category': category
+    }
+    return render(
+        request,
+        'blog/category.html',
+        context
+    )
