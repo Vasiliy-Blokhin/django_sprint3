@@ -33,7 +33,6 @@ class Post(core.BaseModel):
     category = models.ForeignKey(
         'Category',
         null=True,
-        blank=True,
         on_delete=models.SET_NULL,
         verbose_name='Категория'
     )
