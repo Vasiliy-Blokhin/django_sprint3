@@ -1,26 +1,28 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
-from . import core
+from .core import BaseModel
+from .module import LENGTH_CONST
 
 
 User = get_user_model()
 
 
-class Post(core.BaseModel):
+class Post(BaseModel):
     title = models.CharField(
-        max_length=256,
+        max_length=LENGTH_CONST,
         verbose_name='Заголовок'
     )
     text = models.TextField(verbose_name='Текст')
     pub_date = models.DateTimeField(
         verbose_name='Дата и время публикации',
         help_text=('Если установить дату и время в '
-                   + 'будущем — можно делать отложенные публикации.')
+                   'будущем — можно делать отложенные публикации.')
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        related_name='authors',
         verbose_name='Автор публикации'
     )
     location = models.ForeignKey(
@@ -28,12 +30,14 @@ class Post(core.BaseModel):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
+        related_name='locations',
         verbose_name='Местоположение'
     )
     category = models.ForeignKey(
         'Category',
         null=True,
         on_delete=models.SET_NULL,
+        related_name='categories',
         verbose_name='Категория'
     )
 
@@ -42,12 +46,12 @@ class Post(core.BaseModel):
         verbose_name_plural = 'Публикации'
 
     def __str__(self):
-        return self.title
+        return 'Пост пользователя: ' + self.author.get_username()
 
 
-class Category(core.BaseModel):
+class Category(BaseModel):
     title = models.CharField(
-        max_length=256,
+        max_length=LENGTH_CONST,
         verbose_name='Заголовок'
     )
     description = models.TextField(
@@ -57,7 +61,7 @@ class Category(core.BaseModel):
         unique=True,
         verbose_name='Идентификатор',
         help_text=('Идентификатор страницы для URL; разрешены '
-                   + 'символы латиницы, цифры, дефис и подчёркивание.')
+                   'символы латиницы, цифры, дефис и подчёркивание.')
     )
 
     class Meta:
@@ -68,9 +72,9 @@ class Category(core.BaseModel):
         return self.title
 
 
-class Location(core.BaseModel):
+class Location(BaseModel):
     name = models.CharField(
-        max_length=256,
+        max_length=LENGTH_CONST,
         verbose_name='Название места'
     )
 
